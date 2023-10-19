@@ -8,7 +8,7 @@ class CreateProducts < ActiveRecord::Migration[7.0]
       t.text :description
       t.string :category
       t.float :rating
-      t.integer :quantity
+      t.integer :quantity, default: 0
       t.decimal :price
       t.references :user, null: false, foreign_key: true
 

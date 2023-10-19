@@ -8,4 +8,8 @@ Rails.application.routes.draw do
 
   resource :users
   post 'user/login', to: 'authentication#login'
+  post 'user/sent_otp', to: 'authentication#sent_otp'
+  post 'user/verify_otp', to: 'authentication#verify_otp'
+
+  resources :products
 end

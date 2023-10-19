@@ -10,8 +10,9 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.string :password_digest
       t.string :type
       t.integer :mobile_no
-      t.string :confirm_token
-      t.datetime :confirm_token_sent_at
+      t.string :otp
+      t.datetime :otp_sent_at
+      t.boolean :verified, default: false
 
       t.timestamps
     end
