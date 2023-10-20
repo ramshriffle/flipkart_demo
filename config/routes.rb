@@ -12,4 +12,5 @@ Rails.application.routes.draw do
   post 'user/verify_otp', to: 'authentication#verify_otp'
 
   resources :products
+  resources :orders
 end

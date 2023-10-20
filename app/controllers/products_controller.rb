@@ -3,11 +3,16 @@
 # product controller class
 class ProductsController < ApplicationController
   before_action :set_params, only: %i[show update destroy]
-  before_action :check_vendor
 
   def index
-    products = Product.all
-    render json: products
+    products = if @current_user.type == 'Vendor'
+                 @current_user.products.all
+               else
+                 Product.all
+               end
+    return render json: products, status: :ok unless products.empty?
+
+    render json: 'Product not available'
   end
 
   def show

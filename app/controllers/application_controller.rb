@@ -24,8 +24,4 @@ class ApplicationController < ActionController::Base
       render json: { errors: e.message }, status: :unauthorized
     end
   end
-
-  def check_vendor
-    render json: 'You have not permission for this task' unless @current_user.type == 'Vendor'
-  end
 end

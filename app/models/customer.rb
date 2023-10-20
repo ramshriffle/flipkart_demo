@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# order item class
+# customer class
 class Customer < User
   has_many :orders, foreign_key: 'user_id', dependent: :destroy
   has_many :order_items, through: :orders, foreign_key: 'user_id', dependent: :destroy
