@@ -7,10 +7,12 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   resource :users
+  resources :addresses
   post 'user/login', to: 'authentication#login'
   post 'user/sent_otp', to: 'authentication#sent_otp'
   post 'user/verify_otp', to: 'authentication#verify_otp'
 
   resources :products
   resources :orders
+  resource :carts
 end

@@ -2,7 +2,7 @@
 
 # product class
 class Product < ApplicationRecord
-  belongs_to :user
+  belongs_to :vendor, foreign_key: 'user_id'
   has_many :order_items, dependent: :destroy
   has_many :cart_items, dependent: :destroy
   has_one_attached :image

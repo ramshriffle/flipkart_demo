@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# user mailer class
 class UserMailer < ApplicationMailer
   def welcome_email
     @user = params[:user]

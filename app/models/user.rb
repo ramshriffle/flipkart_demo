@@ -2,6 +2,8 @@
 
 # user class
 class User < ApplicationRecord
+  has_many :addresses, dependent: :destroy
+
   has_secure_password
   validates :name, :username, :email, :mobile_no, presence: true, uniqueness: { case_sensitive: false }
   validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }

@@ -2,23 +2,24 @@
 
 # orders controller
 class OrdersController < ApplicationController
-  before_action :set_params, only: [:show, :update, :destroy]
-
-  def index
-    orders = @current_user.orders # .includes(:order_items)
-    return render json: orders unless orders.empty?
-
-    render json: 'No Orders yet'
-  end
+  before_action :set_params, only: %i[show destroy]
 
   def show
     render json: @order
   end
 
-  def update
-    return render json: @order, status: :ok if @order.update(order_params)
+  def create
+    if @current_user.cart.present?
+      cart_items = @current_user.cart.cart_items
+      return render 'Item not found in the cart' if cart_items.empty?
 
-    render json: @order.errors.full_messages, status: :ok
+      order = order_now(cart_items)
+
+      cart_items.destroy_all
+      render json: order.order_items
+    else
+      render json: 'Cart is empty'
+    end
   end
 
   def destroy
@@ -29,12 +30,16 @@ class OrdersController < ApplicationController
 
   private
 
-  def order_params
-    params.permit(:shipping_address)
-  end
-
   def set_params
     @order = @current_user.orders.find_by_id(params[:id])
     render json: 'You did not order anything' if @order.nil?
+  end
+
+  def order_now(cart_items)
+    order = @current_user.orders.create
+    cart_items.each do |item|
+      order.order_items.create(product_id: item.product_id, quantity: item.quantity, address_id: params[:address_id])
+    end
+    order
   end
 end
