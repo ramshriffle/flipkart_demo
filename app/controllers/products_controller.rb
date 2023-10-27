@@ -9,6 +9,9 @@ class ProductsController < ApplicationController
                  @current_user.products.all
                else
                  Product.all
+                # response = HTTParty.get('https://fakestoreapi.com/products')
+                # body = response.body
+                # json = JSON.parse response
                end
     return render json: products, status: :ok unless products.empty?
 

@@ -12,7 +12,8 @@ class CartsController < ApplicationController
     cart_items_data = @cart_items.map do |cart_item|
       {
         id: cart_item.id, product: cart_item.product.category,
-        price: cart_item.product.price,
+        product_id: cart_item.product_id,
+        price: cart_item.price,
         quantity: cart_item.quantity
       }
     end
@@ -20,15 +21,24 @@ class CartsController < ApplicationController
   end
 
   def create
+    cart_item = @current_user.cart_items.find_by_product_id(params[:product_id])
+    if cart_item
+      update_quantity(cart_item)
+      return render json: cart_item, status: :ok
+    end
+
     add_cart = @current_user.cart.cart_items.new(cart_item_params)
     if add_cart.save
-      render json: 'Item Added Successfully', status: 200
+      render json: { message: 'Item added successfully', item: add_cart }, status: 200
     else
       render json: add_cart.errors, status: :unprocessable_entity
     end
   end
 
-  def update_quantity; end
+  def update_quantity(cart_item)
+    quantity = cart_item.quantity + params[:quantity]
+    cart_item.update(quantity: quantity)
+  end
 
   def update
     if @cart_item.update(cart_item_params)
@@ -50,6 +60,17 @@ class CartsController < ApplicationController
   def set_cart
     @cart = @current_user.create_cart unless @current_user.cart.present?
   end
+
+  def clear_cart
+    cart = @current_user.cart.cart_items
+     unless cart.empty?
+      cart.destroy_all
+      return render json: "cart items removed successfully"
+     end
+    render json: "Cart is empty"
+  end
+
+  private
 
   def cart_item_params
     params.permit(:product_id, :quantity)

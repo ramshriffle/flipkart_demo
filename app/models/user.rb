@@ -9,7 +9,7 @@ class User < ApplicationRecord
   validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }
   validates :mobile_no, length: { is: 10 }
 
-  def generate_otp!
+  def generate_otp
     self.otp = SecureRandom.hex(3)
     self.otp_sent_at = Time.now.utc
     save!

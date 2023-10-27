@@ -19,7 +19,7 @@ class AuthenticationController < ApplicationController
   def sent_otp
     user = User.find_by_email(params[:email])
     if user.present?
-      user.generate_otp!
+      user.generate_otp
       UserMailer.sent_otp_email(user).deliver_now
       render json: 'otp successfully generated for login'
     else
@@ -28,7 +28,7 @@ class AuthenticationController < ApplicationController
   end
 
   def verify_otp
-    params[:otp]
+    # params[:otp]
     user = User.find_by(otp: params[:otp])
     if user.present? && user.valid_otp
       user.user_verified

@@ -51,6 +51,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_26_131640) do
 
   create_table "cart_items", force: :cascade do |t|
     t.integer "quantity"
+    t.decimal "price"
     t.integer "cart_id", null: false
     t.integer "product_id", null: false
     t.datetime "created_at", null: false
@@ -68,6 +69,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_26_131640) do
 
   create_table "order_items", force: :cascade do |t|
     t.integer "quantity"
+    t.decimal "price"
     t.integer "order_id", null: false
     t.integer "product_id", null: false
     t.datetime "created_at", null: false

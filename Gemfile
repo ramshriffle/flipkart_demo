@@ -79,6 +79,12 @@ gem 'rubocop-rails', require: false
 # Use Json Web Token (JWT) for token based authentication
 gem 'jwt'
 
-gem 'cancan'
+gem 'cancancan'
 
 gem 'active_model_serializers'
+
+gem 'httparty'
+
+gem 'redis', '~> 4.8.0'
+gem 'sidekiq', '~> 6.1.0'
+gem 'sidekiq-cron'
