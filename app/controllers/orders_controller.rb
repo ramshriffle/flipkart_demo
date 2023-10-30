@@ -2,13 +2,14 @@
 
 # orders controller
 class OrdersController < ApplicationController
+  before_action :authorize_request
   before_action :set_params, only: %i[show destroy]
 
   def index
     orders = @current_user.orders
-    return render json: 'you have not any order' if orders.empty?
+    return render json: 'you have not order anything' if orders.empty?
 
-    render json: orders, status: :ok
+    render json: orders.page(params[:page]), status: :ok
   end
 
   def show
@@ -36,7 +37,7 @@ class OrdersController < ApplicationController
 
   def buy_now
     order = @current_user.orders.new
-    order_item = order.order_items.new(order_params)
+    order_item = order.order_items.new(order_item_params)
     return render json: order_item, status: 201 if order_item.save
 
     render json: order_item.errors.full_messages, status: :unprocessable_entity
@@ -58,12 +59,12 @@ class OrdersController < ApplicationController
 
   private
 
-  def order_params
+  def order_item_params
     params.permit(:product_id, :quantity, :address_id)
   end
 
   def set_params
     @order = @current_user.orders.find_by_id(params[:id])
-    render json: 'your order not found something went wrong' if @order.nil?
+    render json: 'order not found' unless @order
   end
 end

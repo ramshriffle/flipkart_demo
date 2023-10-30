@@ -2,10 +2,14 @@
 
 # application controller
 class ApplicationController < ActionController::Base
-  # protect_from_forgery
   include JsonWebToken
+  attr_accessor :current_user
 
-  before_action :authorize_request
+  skip_before_action :verify_authenticity_token
+
+  rescue_from CanCan::AccessDenied do |_exception|
+    render json: 'Access denied', status: :unauthorized
+  end
   before_action do
     ActiveStorage::Current.host = request.base_url
   end
@@ -14,14 +18,14 @@ class ApplicationController < ActionController::Base
 
   def authorize_request
     header = request.headers['Authorization']
-    header = header.split(' ').last if header
+    token = header.split(' ').last if header
     begin
-      @decoded = jwt_decode(header)
-      @current_user = User.find(@decoded[:user_id])
+      decoded = jwt_decode(token)
+      @current_user = User.find(decoded[:user_id])
     rescue ActiveRecord::RecordNotFound => e
       render json: { errors: e.message }, status: :unauthorized
-    rescue JWT::DecodeError => e
-      render json: { errors: e.message }, status: :unauthorized
+    rescue JWT::DecodeError
+      render json: 'token is invalid or expired', status: :unauthorized
     end
   end
 end

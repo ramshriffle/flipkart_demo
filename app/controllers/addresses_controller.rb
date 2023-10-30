@@ -2,6 +2,7 @@
 
 # address controller
 class AddressesController < ApplicationController
+  before_action :authorize_request
   before_action :set_params, only: %i[show update destroy]
 
   def index
@@ -38,7 +39,7 @@ class AddressesController < ApplicationController
 
   def set_params
     @address = @current_user.addresses.find_by_id(params[:id])
-    render json: 'Address not found' unless @address#.nil?
+    render json: 'Address not found' unless @address # .nil?
   end
 
   def address_params

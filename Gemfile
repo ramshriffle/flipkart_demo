@@ -88,3 +88,9 @@ gem 'httparty'
 gem 'redis', '~> 4.8.0'
 gem 'sidekiq', '~> 6.1.0'
 gem 'sidekiq-cron'
+
+gem 'kaminari'
+
+gem 'activeadmin'
+gem 'devise'
+gem 'sass-rails'

@@ -1,10 +1,9 @@
 # frozen_string_literal: true
+
 require 'sidekiq/web'
 Rails.application.routes.draw do
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
-  # Defines the root path route ("/")
-  # root "articles#index"
+  devise_for :admin_users, ActiveAdmin::Devise.config
+  ActiveAdmin.routes(self)
 
   mount Sidekiq::Web => '/sidekiq'
 
@@ -15,12 +14,12 @@ Rails.application.routes.draw do
   post 'user/verify_otp', to: 'authentication#verify_otp'
 
   resources :products
-  resources :orders 
-  post 'buy_now', to: 'orders#buy_now'
-  
-  resources :order_items, only: [:index]
-  resource :carts do
-    delete 'clear_cart', on: :collection
-  end
+  get 'search_products', to: 'products#search_products'
 
+  resources :orders
+  post 'buy_now', to: 'orders#buy_now'
+
+  resources :order_items, only: %i[index]
+  resource :carts, only: %i[show destroy]
+  resources :cart_items
 end

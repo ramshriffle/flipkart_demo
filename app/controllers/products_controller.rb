@@ -2,20 +2,18 @@
 
 # product controller class
 class ProductsController < ApplicationController
+  load_and_authorize_resource
+  before_action :authorize_request
   before_action :set_params, only: %i[show update destroy]
 
   def index
     products = if @current_user.type == 'Vendor'
-                 @current_user.products.all
+                 @current_user.products.page(params[:page])
                else
-                 Product.all
-                # response = HTTParty.get('https://fakestoreapi.com/products')
-                # body = response.body
-                # json = JSON.parse response
+                 Product.page(params[:page])
                end
-    return render json: products, status: :ok unless products.empty?
 
-    render json: 'Product not available'
+    render json: products, status: :ok
   end
 
   def show
@@ -40,11 +38,23 @@ class ProductsController < ApplicationController
   end
 
   def destroy
-    if @product.destroy
-      render json: 'Product successfully deleted'
-    else
-      render json: @product.errors.full_messages
-    end
+    return render json: { message: 'Account deleted successfully!!', data: @product }, status: :ok if @product.destroy
+
+    render json: @product.errors.full_messages
+  end
+
+  def search_products
+    products = if params[:category].present?
+                 Product.where('category LIKE ?', "%#{params[:category]}%").page(params[:page])
+               elsif params[:title].present?
+                 Product.where('title LIKE ?', "%#{params[:title]}%").page(params[:page])
+               else
+                 Product.page(params[:page]).per(2)
+               end
+
+    return render json: products, status: :ok if products.present?
+
+    render json: 'Product not found', status: :ok
   end
 
   private
@@ -55,6 +65,6 @@ class ProductsController < ApplicationController
 
   def set_params
     @product = @current_user.products.find_by_id(params[:id])
-    render json: 'Product not found' if @product.nil?
+    render json: 'Product not found', status: :not_found unless @product
   end
 end
