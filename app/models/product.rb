@@ -2,8 +2,8 @@
 
 # product class
 class Product < ApplicationRecord
-  paginates_per 1
-  validates :title, :description, :category, :price, presence: true
+  paginates_per 2
+  validates :title, :description, :category, :quantity, :price, :image, presence: true
   validates :quantity, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
   validates :price, numericality: { greater_than_or_equal_to: 1 }
   validates :rating, numericality: { in: 0..5 }
@@ -20,5 +20,8 @@ class Product < ApplicationRecord
 
   def self.ransackable_associations(_auth_object = nil)
     %w[cart_items image_attachment image_blob order_items vendor]
+  end
+
+  def check_product_available
   end
 end

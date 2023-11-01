@@ -3,7 +3,7 @@
 # address controller
 class AddressesController < ApplicationController
   before_action :authorize_request
-  before_action :set_params, only: %i[show update destroy]
+  before_action :set_params, only: %i[show destroy]
 
   def index
     addresses = @current_user.addresses
@@ -22,14 +22,6 @@ class AddressesController < ApplicationController
       render json: address, status: 201
     else
       render json: address.errors.full_messages, status: :unprocessable_entity
-    end
-  end
-
-  def update
-    if @address.update(address_params)
-      render json: @address, status: :ok
-    else
-      render json: @address.errors.full_messages, status: :unprocessable_entity
     end
   end
 

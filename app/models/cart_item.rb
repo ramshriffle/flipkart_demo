@@ -2,13 +2,28 @@
 
 # cart item class
 class CartItem < ApplicationRecord
-  paginates_per 1
+  paginates_per 2
   validates :quantity, presence: true, numericality: { greater_than_or_equal_to: 1, only_integer: true }
   # validates :user_id, uniqueness: true
   belongs_to :cart
   belongs_to :product
 
   before_save :total_price
+
+  validate :quantity_is_available
+
+  def quantity_is_available
+    byebug
+    available_quantity = self.product.quantity - self.sum_product_orders
+    if quantity > available_quantity
+      errors.add(:base, "Product is not available, Please add item in the cart only what's available")
+    end
+  end
+
+  def sum_product_orders
+    byebug
+    OrderItem.where(product: self.product).sum(:quantity)
+  end
 
   def total_price
     item_price = product.price * quantity

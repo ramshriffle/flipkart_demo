@@ -2,8 +2,8 @@
 
 # product controller class
 class ProductsController < ApplicationController
-  load_and_authorize_resource
   before_action :authorize_request
+  load_and_authorize_resource
   before_action :set_params, only: %i[show update destroy]
 
   def index
@@ -21,6 +21,7 @@ class ProductsController < ApplicationController
   end
 
   def create
+    byebug
     product = @current_user.products.new(product_params)
     if product.save
       render json: product, status: :ok

@@ -2,9 +2,10 @@
 
 # user class
 class User < ApplicationRecord
-  validates :name, :username, :email, :mobile_no, presence: true, uniqueness: { case_sensitive: false }
+  validates :username, :email, presence: true, uniqueness: { case_sensitive: false }
   validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }
-  validates :mobile_no, length: { is: 10 }
+  # validates :mobile_no, length: { is: 10 }
+  validates :name, presence: true
   validates :password, confirmation: true
   validates :password_confirmation, presence: true, if: :password_digest_changed?
 
@@ -12,6 +13,7 @@ class User < ApplicationRecord
   has_one_attached :profile_picture
 
   has_many :addresses, dependent: :destroy
+  accepts_nested_attributes_for :addresses
 
   def generate_otp
     self.otp = SecureRandom.hex(3)

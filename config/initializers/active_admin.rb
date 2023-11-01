@@ -352,4 +352,8 @@ ActiveAdmin.setup do |config|
   #
   # config.use_webpacker = true
   config.comments = false
+
+  # config.authorization_adapter = ActiveAdmin::CanCanAdapter
+  # config.on_unauthorized_access = :access_denied
+  # config.cancan_ability_class = "Ability"
 end

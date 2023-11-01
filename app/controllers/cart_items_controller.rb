@@ -3,6 +3,8 @@
 # cart item controller
 class CartItemsController < ApplicationController
   before_action :authorize_request
+  load_and_authorize_resource
+  
   before_action :set_cart, only: %i[create]
   before_action :set_params, only: %i[show update destroy]
 
@@ -24,11 +26,11 @@ class CartItemsController < ApplicationController
       return render json: cart_item, status: :ok
     end
 
-    add_cart = @current_user.cart.cart_items.new(cart_item_params)
-    if add_cart.save
-      render json: { message: 'Item added successfully', item: add_cart }, status: 200
+    add_item = @current_user.cart.cart_items.new(cart_item_params)
+    if add_item.save
+      render json: { message: 'Item added successfully', item: add_item }, status: 200
     else
-      render json: add_cart.errors, status: :unprocessable_entity
+      render json: add_item.errors, status: :unprocessable_entity
     end
   end
 
@@ -47,13 +49,15 @@ class CartItemsController < ApplicationController
 
   def destroy
     render json: 'Cart item removed successfully', status: :ok if @cart_item.destroy
+
+    render json: @cart_item.errors.full_messages
   end
 
   def set_params
-    return render json: 'Cart is empty' unless @current_user.cart
+    return render json: 'Cart is empty', status: :not_found unless @current_user.cart
 
     @cart_item = @current_user.cart.cart_items.find_by_id(params[:id])
-    render json: 'item not found' unless @cart_item
+    render json: 'item not found', status: :not_found unless @cart_item
   end
 
   def set_cart

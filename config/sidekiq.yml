@@ -1,5 +1,1 @@
 :schedule:
-  post_publish:
-    cron: "* * * * *"
-    class: "ExpirationNotification"
-    queue: "default"

@@ -3,13 +3,14 @@
 # application controller
 class ApplicationController < ActionController::Base
   include JsonWebToken
-  attr_accessor :current_user
 
+  attr_accessor :current_user
   skip_before_action :verify_authenticity_token
 
-  rescue_from CanCan::AccessDenied do |_exception|
+  rescue_from CanCan::AccessDenied do |exception|
     render json: 'Access denied', status: :unauthorized
   end
+
   before_action do
     ActiveStorage::Current.host = request.base_url
   end

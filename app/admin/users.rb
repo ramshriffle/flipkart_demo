@@ -16,7 +16,7 @@ ActiveAdmin.register User do
   #   permitted
   # end
 
-  permit_params :name, :username, :password, :password_confirmation, :email, :type, :mobile_no
+  permit_params :name, :username, :password, :password_confirmation, :email, :type, :mobile_no, :profile_picture
 
   index do
     selectable_column
@@ -44,7 +44,28 @@ ActiveAdmin.register User do
       f.input :mobile_no
       f.input :password
       f.input :password_confirmation
+      f.input :profile_picture, as: :file
     end
     f.actions
+  end
+
+  show do
+    attributes_table do
+      row :name
+      row :username
+      row :email
+      row :type
+      row :mobile_no
+
+      if resource.profile_picture.attached?
+        row :profile_picture do |img|
+          image_tag img.profile_picture.url, size: "40x40"
+        end
+      else
+        row :profile_picture do |img|
+          "No profile photo"
+        end
+      end
+    end
   end
 end

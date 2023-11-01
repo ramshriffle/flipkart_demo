@@ -9,9 +9,10 @@ class UsersController < ApplicationController
   end
 
   def create
+    byebug
     user = User.new(user_params)
     if user.save
-      # UserMailer.with(user: user).welcome_email.deliver_now
+      UserMailer.with(user: user).welcome_email.deliver_now
       render json: user, status: 201
     else
       render json: user.errors.full_messages, status: :unprocessable_entity
@@ -38,6 +39,21 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.permit(:name, :username, :email, :password, :password_confirmation, :type, :mobile_no, :profile_picture)
+    # params.permit(:name, :username, :email, :password, :password_confirmation, :type, :mobile_no, :profile_picture)
+    params.require(:user).permit(
+			:name,
+			:username,
+			:email,
+      :password,
+      :password_confirmation,
+      :type,
+      :mobile_no,
+      addresses_attributes: [
+          :id,
+					:street,
+					:city, 
+					:pincode
+			]
+		)
   end
 end
