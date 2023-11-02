@@ -4,8 +4,9 @@
 class User < ApplicationRecord
   validates :username, :email, presence: true, uniqueness: { case_sensitive: false }
   validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i }
-  # validates :mobile_no, length: { is: 10 }
-  validates :name, presence: true
+  validates :name, :type, :mobile_no, presence: true
+  # validates :mobile_no, uniqueness: true
+  validates :mobile_no, format: { with: /\A^[6-9]\d{9}$\z/ }
   validates :password, confirmation: true
   validates :password_confirmation, presence: true, if: :password_digest_changed?
 

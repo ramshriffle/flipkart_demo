@@ -13,6 +13,7 @@ class OrderItem < ApplicationRecord
   validate :quantity_is_available
 
   def quantity_is_available
+    byebug
     available_quantity = self.product.quantity - self.sum_product_orders
     if quantity > available_quantity
       errors.add(:base, "Product is not available, Please order only what's available")

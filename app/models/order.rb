@@ -15,8 +15,4 @@ class Order < ApplicationRecord
   def self.ransackable_associations(auth_object = nil)
     ["address", "customer", "order_items"]
   end
-
-  def check_address
-    
-  end
 end

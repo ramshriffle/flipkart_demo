@@ -132,7 +132,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_30_091721) do
     t.string "email"
     t.string "password_digest"
     t.string "type"
-    t.integer "mobile_no"
+    t.string "mobile_no"
     t.string "otp"
     t.datetime "otp_sent_at"
     t.boolean "verified", default: false
