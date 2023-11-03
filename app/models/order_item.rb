@@ -13,15 +13,14 @@ class OrderItem < ApplicationRecord
   validate :quantity_is_available
 
   def quantity_is_available
-    byebug
-    available_quantity = self.product.quantity - self.sum_product_orders
-    if quantity > available_quantity
-      errors.add(:base, "Product is not available, Please order only what's available")
-    end
+    available_quantity = product.quantity - sum_product_orders
+    return unless quantity > available_quantity
+
+    errors.add(:base, "Product is not available, Please order only what's available")
   end
 
   def sum_product_orders
-    OrderItem.where(product: self.product).sum(:quantity)
+    OrderItem.where(product: product).sum(:quantity)
   end
 
   def total_price
@@ -29,7 +28,7 @@ class OrderItem < ApplicationRecord
     self.price = item_price
   end
 
-  def self.ransackable_attributes(auth_object = nil)
-    ["created_at", "id", "order_id", "price", "product_id", "quantity", "updated_at"]
+  def self.ransackable_attributes(_auth_object = nil)
+    %w[created_at id order_id price product_id quantity updated_at]
   end
 end

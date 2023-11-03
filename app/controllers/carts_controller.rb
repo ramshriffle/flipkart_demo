@@ -4,12 +4,13 @@
 class CartsController < ApplicationController
   before_action :authorize_request
   load_and_authorize_resource
-  
+
   before_action :set_params, only: %i[show destroy]
 
   def show
     render json: @cart, status: :ok
   end
+
   def destroy
     return render json: { message: 'Account deleted successfully!!', data: @cart }, status: :ok if @cart.destroy
 

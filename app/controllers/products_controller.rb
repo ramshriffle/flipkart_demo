@@ -4,19 +4,16 @@
 class ProductsController < ApplicationController
   before_action :authorize_request
   load_and_authorize_resource
+
   before_action :set_params, only: %i[show update destroy]
 
   def index
-    products = if @current_user.type == 'Vendor'
-                 @current_user.products.page(params[:page])
-               else
-                 Product.page(params[:page])
-               end
-
+    products = Product.all#page(params[:page])
     render json: products, status: :ok
   end
 
   def show
+    byebug
     render json: @product, status: :ok
   end
 
@@ -64,7 +61,7 @@ class ProductsController < ApplicationController
   end
 
   def set_params
-    @product = @current_user.products.find_by_id(params[:id])
+    @product = Product.find_by(id: params[:id])
     render json: 'Product not found', status: :not_found unless @product
   end
 end

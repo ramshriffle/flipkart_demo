@@ -59,11 +59,11 @@ ActiveAdmin.register User do
 
       if resource.profile_picture.attached?
         row :profile_picture do |img|
-          image_tag img.profile_picture.url, size: "40x40"
+          image_tag img.profile_picture.url, size: '40x40'
         end
       else
-        row :profile_picture do |img|
-          "No profile photo"
+        row :profile_picture do |_img|
+          'No profile photo'
         end
       end
     end

@@ -24,7 +24,7 @@ ActiveAdmin.register CartItem do
     column :quantity
     column :price
     column :product
-    column :cart_id 
+    column :cart_id
     actions
   end
 

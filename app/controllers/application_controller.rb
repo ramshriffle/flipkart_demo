@@ -5,9 +5,10 @@ class ApplicationController < ActionController::Base
   include JsonWebToken
 
   attr_accessor :current_user
+
   skip_before_action :verify_authenticity_token
 
-  rescue_from CanCan::AccessDenied do |exception|
+  rescue_from CanCan::AccessDenied do |_exception|
     render json: 'Access denied', status: :unauthorized
   end
 
@@ -26,7 +27,7 @@ class ApplicationController < ActionController::Base
     rescue ActiveRecord::RecordNotFound => e
       render json: { errors: e.message }, status: :unauthorized
     rescue JWT::DecodeError
-      render json: 'token is invalid or expired', status: :unauthorized
+      render json: { error: 'Invalid token' }, status: :unauthorized
     end
   end
 end

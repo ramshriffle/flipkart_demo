@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   before_action :authorize_request, except: [:create]
 
   def show
-    render json: @current_user
+    render json: @current_user, status: :ok
   end
 
   def create
@@ -22,17 +22,15 @@ class UsersController < ApplicationController
     if @current_user.update(user_params)
       render json: @current_user, status: :ok
     else
-      render json: @current_user.errors.full_messages, status: :unprocessable_entity
+      render json: {errors: @current_user.errors.full_messages}, status: :unprocessable_entity
     end
   end
 
   def destroy
-    if @current_user.destroy
-      return render json: { message: 'Account deleted successfully!!', data: @current_user },
-                    status: :ok
-    end
-
-    render json: @current_user.errors.full_messages
+    @current_user.destroy
+    render json: {message: "Account deleted successfully!!"}, status: :ok
+  rescue Exception => e
+    render json: e.message, status: :internal_server_error
   end
 
   private
@@ -40,19 +38,19 @@ class UsersController < ApplicationController
   def user_params
     # params.permit(:name, :username, :email, :password, :password_confirmation, :type, :mobile_no, :profile_picture)
     params.require(:user).permit(
-			:name,
-			:username,
-			:email,
+      :name,
+      :username,
+      :email,
       :password,
       :password_confirmation,
       :type,
       :mobile_no,
-      addresses_attributes: [
-          :id,
-					:street,
-					:city, 
-					:pincode
-			]
-		)
+      addresses_attributes: %i[
+        id
+        street
+        city
+        pincode
+      ]
+    )
   end
 end

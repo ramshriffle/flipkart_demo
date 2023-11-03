@@ -12,14 +12,14 @@ class CartItem < ApplicationRecord
   validate :quantity_is_available
 
   def quantity_is_available
-    available_quantity = self.product.quantity - self.sum_product_orders
-    if quantity > available_quantity
-      errors.add(:base, "Product is not available, Please add item in the cart only what's available")
-    end
+    available_quantity = product.quantity - sum_product_orders
+    return unless quantity > available_quantity
+
+    errors.add(:base, "Product is not available, Please add item in the cart only what's available")
   end
 
   def sum_product_orders
-    OrderItem.where(product: self.product).sum(:quantity)
+    OrderItem.where(product: product).sum(:quantity)
   end
 
   def total_price

@@ -31,7 +31,7 @@ class AuthenticationController < ApplicationController
       user.user_verified
       render json: 'Authorize user, now you can login your account'
     else
-      render json: {error:  "otp is not valid or expired. try again"}, status: :not_found
+      render json: { error: 'otp is not valid or expired. try again' }, status: :not_found
     end
   end
 end

@@ -12,7 +12,7 @@ class Order < ApplicationRecord
     %w[created_at id updated_at user_id]
   end
 
-  def self.ransackable_associations(auth_object = nil)
-    ["address", "customer", "order_items"]
+  def self.ransackable_associations(_auth_object = nil)
+    %w[address customer order_items]
   end
 end

@@ -4,7 +4,7 @@
 class CartItemsController < ApplicationController
   before_action :authorize_request
   load_and_authorize_resource
-  
+
   before_action :set_cart, only: %i[create]
   before_action :set_params, only: %i[show update destroy]
 

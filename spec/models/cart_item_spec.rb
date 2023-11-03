@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe CartItem, type: :model do
   before(:all) do
     @cart_item = FactoryBot.create(:cart_item)
   end
-  
+
   # describe 'Associations' do
   #   it { should belong_to(:cart) }
   #   it { should belong_to(:product) }

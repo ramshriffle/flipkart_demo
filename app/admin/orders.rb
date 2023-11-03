@@ -27,7 +27,7 @@ ActiveAdmin.register Order do
   end
 
   filter :customer # , collection: Customer.all.map{|a| [a.name , a.id] }
-  filter :address, collection: Address.all.map{|a| [a.city , a.id] }
+  filter :address, collection: Address.all.map { |a| [a.city, a.id] }
 
   form do |f|
     f.inputs do

@@ -12,7 +12,7 @@ class Ability
       can :manage, Cart
       can :manage, Order
       can :manage, CartItem
-      can :manage, OrderItem 
+      can :manage, OrderItem
       can :search_products, Product
     end
   end

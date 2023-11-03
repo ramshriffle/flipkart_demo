@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :order_item do
     quantity { 10 }
-    price { 50 }
+    # price { 50 }
     product
     order
   end

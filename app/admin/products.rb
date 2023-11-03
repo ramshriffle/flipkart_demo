@@ -29,7 +29,7 @@ ActiveAdmin.register Product do
     column :vendor
 
     column :image do |img|
-      image_tag img.image.url, size: "30x30"
+      image_tag img.image.url, size: '30x30'
     end
     actions
   end
@@ -64,7 +64,7 @@ ActiveAdmin.register Product do
 
       if resource.image.attached?
         row :image do |img|
-          image_tag img.image.url, size: "30x30"
+          image_tag img.image.url, size: '30x30'
         end
       end
     end
