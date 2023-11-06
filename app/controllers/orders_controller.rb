@@ -9,8 +9,6 @@ class OrdersController < ApplicationController
 
   def index
     orders = @current_user.orders
-    return render json: 'you have not order anything' if orders.empty?
-
     render json: orders.page(params[:page]), status: :ok
   end
 
@@ -43,7 +41,7 @@ class OrdersController < ApplicationController
       # OrderMailer.with(user: @current_user, order: order).order_confirmed.deliver_now
       render json: order, status: :created
     else
-      render json: order.errors.full_messages, status: :unprocessable_entity
+      render json: { errors: order.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -56,7 +54,7 @@ class OrdersController < ApplicationController
   end
 
   def destroy
-    return render json: 'Order cancel succssefully', status: :ok if @order.destroy
+    return render json: { message: 'Order cancel succssefully' }, status: :ok if @order.destroy
 
     render json: @order.errors.full_messages, status: :ok
   end
@@ -68,7 +66,7 @@ class OrdersController < ApplicationController
   end
 
   def set_params
-    @order = @current_user.orders.find_by_id(params[:id])
+    @order = Order.find_by_id(params[:id])
     render json: 'order not found', status: :not_found unless @order
   end
 end

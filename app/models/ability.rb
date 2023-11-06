@@ -13,6 +13,7 @@ class Ability
       can :manage, Order
       can :manage, CartItem
       can :manage, OrderItem
+      can :read, Product
       can :search_products, Product
     end
   end

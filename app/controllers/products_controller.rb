@@ -8,12 +8,11 @@ class ProductsController < ApplicationController
   before_action :set_params, only: %i[show update destroy]
 
   def index
-    products = Product.all#page(params[:page])
+    products = Product.all # page(params[:page])
     render json: products, status: :ok
   end
 
   def show
-    byebug
     render json: @product, status: :ok
   end
 
@@ -22,7 +21,7 @@ class ProductsController < ApplicationController
     if product.save
       render json: product, status: :ok
     else
-      render json: product.errors.full_messages, status: :unprocessable_entity
+      render json: { errors: product.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -35,7 +34,7 @@ class ProductsController < ApplicationController
   end
 
   def destroy
-    return render json: { message: 'Account deleted successfully!!', data: @product }, status: :ok if @product.destroy
+    return render json: { message: 'Product delete successfully' }, status: :ok if @product.destroy
 
     render json: @product.errors.full_messages
   end
@@ -61,6 +60,7 @@ class ProductsController < ApplicationController
   end
 
   def set_params
+    byebug
     @product = Product.find_by(id: params[:id])
     render json: 'Product not found', status: :not_found unless @product
   end

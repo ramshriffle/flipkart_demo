@@ -29,18 +29,11 @@ RSpec.describe User, type: :model do
     # it { should validate_format_of(:email).with_message(/\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i) }
   end
 
-  # describe 'methods' do
-    # it 'generate otp' do
-    #   @user.generate_otp
-    #   @user.otp = nil
-    #   @user.otp_sent_at = nil
-    #   expect(@user).to be_valid
-    # end
-
-    # it 'valid otp' do
-    #   byebug
-    #   @user.valid_otp
-    #   expect( (@user.otp_sent_at + 5.seconds) > Time.now.utc).to eq "false"
-    # end
-  # end
+  describe 'methods' do
+    it 'generate otp' do
+      @user.generate_otp
+      expect(@user.otp).not_to be_nil
+      expect(@user.otp_sent_at).not_to be_nil
+    end
+  end
 end

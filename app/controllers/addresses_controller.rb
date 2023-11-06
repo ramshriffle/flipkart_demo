@@ -6,13 +6,13 @@ class AddressesController < ApplicationController
   before_action :set_params, only: %i[show destroy]
 
   def index
-    addresses = @current_user.addresses
-    return render json: 'Address not found' if addresses.empty?
-
+    byebug
+    addresses = @current_user.addresses.all
     render json: addresses, status: :ok
   end
 
   def show
+    byebug
     render json: @address, status: :ok
   end
 
@@ -26,10 +26,13 @@ class AddressesController < ApplicationController
   end
 
   def destroy
-    render json: 'Address remove successfully', status: :ok if @address.destroy
+    return render json: 'Address remove successfully', status: :ok if @address.destroy
+
+    render json: @address.errors.full_messages
   end
 
   def set_params
+    byebug
     @address = @current_user.addresses.find_by_id(params[:id])
     render json: 'Address not found' unless @address # .nil?
   end

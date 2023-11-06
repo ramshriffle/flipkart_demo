@@ -18,7 +18,7 @@ RSpec.describe UsersController, type: :controller do
   end
 
   describe 'Get show' do
-    let(:params) {{id: user.id}}
+    let(:params) { { id: user.id } }
 
     subject do
       request.headers['Authorization'] = bearer_token
@@ -26,7 +26,7 @@ RSpec.describe UsersController, type: :controller do
     end
 
     context 'without token' do
-      let(:bearer_token) {''}
+      let(:bearer_token) { '' }
       it 'return unauthorize' do
         expect(subject).to have_http_status(401)
       end
@@ -35,16 +35,16 @@ RSpec.describe UsersController, type: :controller do
     context 'with token' do
       context 'with valid token' do
         it 'returns user' do
-         expect(subject).to have_http_status(200)
+          expect(subject).to have_http_status(200)
         end
       end
 
       context 'with invalid token' do
-        let(:bearer_token) { "Bearer #{token}"+"1" }
+        let(:bearer_token) { "Bearer #{token}1" }
         it 'returns unauthorize' do
           expect(subject).to have_http_status(401)
-          expect(JSON.parse(subject.body)).to eq({"error"=>"Invalid token"})
-         end
+          expect(JSON.parse(subject.body)).to eq({ 'error' => 'Invalid token' })
+        end
       end
     end
   end
@@ -58,7 +58,7 @@ RSpec.describe UsersController, type: :controller do
     end
 
     context 'without token' do
-      let(:bearer_token) {''}
+      let(:bearer_token) { '' }
       it 'return unauthorize' do
         expect(subject).to have_http_status(401)
       end
@@ -67,28 +67,29 @@ RSpec.describe UsersController, type: :controller do
     context 'with token' do
       context 'with valid token' do
         context 'valid params' do
-          let(:params) { {user: { name: 'ram'} } }
+          let(:params) { { user: { name: 'ram' } } }
           it 'returns user' do
             expect(subject).to have_http_status(200)
-            expect( JSON.parse(subject.body)).to eq("id"=> user.id, "name"=> 'ram', "username"=>user.username, "email"=>user.email, "mobile_no"=>user.mobile_no, "type"=>user.type, "profile_picture"=>nil )
+            expect(JSON.parse(subject.body)).to eq('id' => user.id, 'name' => 'ram', 'username' => user.username,
+                                                   'email' => user.email, 'mobile_no' => user.mobile_no, 'type' => user.type, 'profile_picture' => nil)
           end
         end
 
         context 'invalid params' do
-          let(:params) { {user: {name: ''} } }
+          let(:params) { { user: { name: '' } } }
           it 'unauthorize user' do
             expect(subject).to have_http_status(422)
-            expect( JSON.parse(subject.body)).to eq("errors"=>["Name can't be blank"])
+            expect(JSON.parse(subject.body)).to eq('errors' => ["Name can't be blank"])
           end
         end
       end
 
       context 'with invalid token' do
-        let(:bearer_token) { "Bearer #{token}"+"1" }
+        let(:bearer_token) { "Bearer #{token}1" }
         it 'returns unauthorize' do
           expect(subject).to have_http_status(401)
-          expect(JSON.parse(subject.body)).to eq({"error"=>"Invalid token"})
-         end
+          expect(JSON.parse(subject.body)).to eq({ 'error' => 'Invalid token' })
+        end
       end
     end
   end
@@ -100,7 +101,7 @@ RSpec.describe UsersController, type: :controller do
     end
 
     context 'without token' do
-      let(:bearer_token) {''}
+      let(:bearer_token) { '' }
       it 'return unauthorize' do
         expect(subject).to have_http_status(401)
       end
@@ -108,26 +109,18 @@ RSpec.describe UsersController, type: :controller do
 
     context 'with token' do
       context 'with valid token' do
-        context 'valid user' do
-          it 'returns user' do
-            expect(subject).to have_http_status(200)
-            expect( JSON.parse(subject.body)).to eq("message"=>"Account deleted successfully!!")
-          end
+        it 'user delete successfully' do
+          expect(subject).to have_http_status(200)
+          expect(JSON.parse(subject.body)).to eq('message' => 'Account deleted successfully!!')
         end
-
-        # context 'raise exception' do
-        #   it 'unauthorize user' do
-        #     expect(subject).to have_http_status(422)
-        #   end
-        # end
       end
 
       context 'with invalid token' do
-        let(:bearer_token) { "Bearer #{token}"+"1" }
+        let(:bearer_token) { "Bearer #{token}1" }
         it 'returns unauthorize' do
           expect(subject).to have_http_status(401)
-          expect(JSON.parse(subject.body)).to eq({"error"=>"Invalid token"})
-         end
+          expect(JSON.parse(subject.body)).to eq({ 'error' => 'Invalid token' })
+        end
       end
     end
   end

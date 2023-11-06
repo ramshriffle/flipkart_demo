@@ -5,12 +5,12 @@ class AuthenticationController < ApplicationController
   def login
     user = User.find_by_email(params[:email])
     if user&.authenticate(params[:password])
-      return render json: 'before login activate your account' unless user.verified == true
+      return render json: { message: 'before login activate your account' } unless user.verified == true
 
       token = jwt_encode(user_id: user.id)
-      render json: { message: 'login successfully', token: token }
+      render json: { message: 'login successfully', token: token }, status: :ok
     else
-      render json: 'please check your email or password'
+      render json: { message: 'please check your email or password' }, status: :not_found
     end
   end
 
@@ -19,9 +19,9 @@ class AuthenticationController < ApplicationController
     if user.present?
       user.generate_otp
       UserMailer.sent_otp_email(user).deliver_now
-      render json: 'otp successfully generated for login'
+      render json: 'otp successfully generated for login', status: :ok
     else
-      render json: 'Email not found, check your email'
+      render json: 'Email not found, check your email', status: :not_found
     end
   end
 

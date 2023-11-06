@@ -1,13 +1,17 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-RSpec.describe ProductsController, type: :controller do
+RSpec.describe OrdersController, type: :controller do
   include GenerateToken
 
-  let(:user) { FactoryBot.create(:user, type: 'Vendor') }
-  let(:product) { FactoryBot.create(:product, user_id: user.id) }
+  let(:user_v) { FactoryBot.create(:user, type: 'Vendor') }
+  let(:product) { FactoryBot.create(:product, user_id: user_v.id) }
+  let(:user_c) { FactoryBot.create(:user, type: 'Customer') }
+  let(:order) { FactoryBot.create(:order, user_id: user_c.id) }
+  let(:order_item) { FactoryBot.create(:order_item, order_id: order.id, product_id: product.id) }
+
   let(:token) do
-    generate_token(user)
+    generate_token(user_c)
   end
   let(:bearer_token) { "Bearer #{token}" }
 
@@ -26,8 +30,7 @@ RSpec.describe ProductsController, type: :controller do
     end
     context 'with token' do
       context 'with valid token' do
-        it 'returns all the products' do
-          byebug
+        it 'returns all order' do
           expect(subject).to have_http_status(200)
         end
       end
@@ -42,7 +45,7 @@ RSpec.describe ProductsController, type: :controller do
   end
 
   describe 'GET show' do
-    let(:params) { { id: product.id } }
+    let(:params) { { id: order.id } }
 
     subject do
       request.headers['Authorization'] = bearer_token
@@ -58,16 +61,15 @@ RSpec.describe ProductsController, type: :controller do
 
     context 'with token' do
       context 'with valid token' do
-        context 'product found' do
-          it 'returns product' do
+        context 'order found' do
+          it 'returns order' do
             expect(subject).to have_http_status(200)
           end
         end
 
-        # context 'product not found' do
+        # context 'order not found' do
         #   let(:params) { { id: 0 } }
-        #   it 'product not found' do
-
+        #   it 'order not found' do
         #     expect(subject).to have_http_status(404)
         #   end
         # end
@@ -83,12 +85,12 @@ RSpec.describe ProductsController, type: :controller do
     end
   end
 
-  describe 'POST create' do
+  describe 'POST buy now' do
     let(:params) { {} }
 
     subject do
       request.headers['Authorization'] = bearer_token
-      post :create, params: params
+      post :buy_now, params: params
     end
 
     context 'without token' do
@@ -102,66 +104,20 @@ RSpec.describe ProductsController, type: :controller do
       context 'with valid token' do
         context 'valid params' do
           let(:params) do
-            { title: product.title, description: product.description, category: product.category, quantity: product.quantity,
-              price: product.price, rating: product.rating, user_id: user.id }
+            { order: { user_id: order.user_id, address_id: order.address_id,
+                       order_items_attributes: [quantity: 1, product_id: order_item.product_id] } }
           end
-          it 'retrurn created new prodct' do
-            expect(subject).to have_http_status(200)
-            expect(JSON.parse(subject.body)).to eq('id' => 2, 'title' => product.title,
-                                                   'description' => product.description, 'category' => product.category, 'quantity' => product.quantity, 'price' => '100.0', 'rating' => product.rating, 'user_id' => product.user_id, 'image' => nil)
+          it 'retrurn created new order' do
+            expect(subject).to have_http_status(201)
+            # expect( JSON.parse(subject.body)).to eq("id"=>2, "title"=>product.title, "description"=>product.description, "category"=>product.category, "quantity"=>product.quantity, "price"=>"100.0", "rating"=>product.rating, "user_id"=>product.user_id, "image"=>nil )
           end
         end
 
         context 'invalid params' do
-          let(:params) { { id: product.id, title: '' } }
+          let(:params) { { order: { user_is: order.user_id, address_id: nil } } }
           it 'return unprocessable entity' do
             expect(subject).to have_http_status(422)
-          end
-        end
-      end
-
-      context 'with invalid token' do
-        let(:bearer_token) { "Bearer #{token}1" }
-        it 'returns unauthorize' do
-          expect(subject).to have_http_status(401)
-          expect(JSON.parse(subject.body)).to eq({ 'error' => 'Invalid token' })
-        end
-      end
-    end
-  end
-
-  describe 'PUT update' do
-    let(:params) { { id: product.id } }
-
-    subject do
-      request.headers['Authorization'] = bearer_token
-      put :update, params: params
-    end
-
-    context 'without token' do
-      let(:bearer_token) { '' }
-      it 'return unauthorize' do
-        expect(subject).to have_http_status(401)
-      end
-    end
-
-    context 'with token' do
-      context 'with valid token' do
-        context 'valid params' do
-          let(:params) { { id: product.id, title: 'jacket' } }
-          it 'return updated product' do
-            expect(subject).to have_http_status(200)
-            expect(JSON.parse(subject.body)).to eq('id' => product.id, 'title' => 'jacket',
-                                                   'description' => product.description, 'category' => product.category, 'quantity' => product.quantity, 'price' => '100.0', 'rating' => product.rating, 'user_id' => product.user_id, 'image' => nil)
-          end
-        end
-
-        context 'invalid params' do
-          let(:params) { { id: product.id, title: '' } }
-          it 'return unprocessable to update product' do
-            byebug
-            expect(subject).to have_http_status(422)
-            expect(JSON.parse(subject.body)).to eq(["Title can't be blank"])
+            expect(JSON.parse(subject.body)).to eq('errors' => ['Address must exist'])
           end
         end
       end
@@ -177,7 +133,7 @@ RSpec.describe ProductsController, type: :controller do
   end
 
   describe 'DELETE destroy' do
-    let(:params) { { id: product.id } }
+    let(:params) { { id: order.id } }
 
     subject do
       request.headers['Authorization'] = bearer_token
@@ -193,16 +149,16 @@ RSpec.describe ProductsController, type: :controller do
 
     context 'with token' do
       context 'with valid token' do
-        context 'product found' do
-          it 'delete product successfully' do
+        context 'order found' do
+          it 'delete order successfully' do
             expect(subject).to have_http_status(200)
-            expect(JSON.parse(subject.body)).to eq('message' => 'Product delete successfully')
+            expect(JSON.parse(subject.body)).to eq('message' => 'Order cancel succssefully')
           end
         end
 
-        # context 'product not found' do
-        #   let(:params) { {id: 0} }
-        #   it 'product not found' do
+        # context 'order not found' do
+        #   let(:params) { { id: 0 } }
+        #   it 'order not found' do
         #     expect(subject).to have_http_status(404)
         #   end
         # end

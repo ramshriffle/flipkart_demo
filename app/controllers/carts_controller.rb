@@ -8,11 +8,13 @@ class CartsController < ApplicationController
   before_action :set_params, only: %i[show destroy]
 
   def show
+    byebug
     render json: @cart, status: :ok
   end
 
   def destroy
-    return render json: { message: 'Account deleted successfully!!', data: @cart }, status: :ok if @cart.destroy
+    byebug
+    return render json: { message: 'Cart deleted successfully!!' }, status: :ok if @cart.destroy
 
     render json: @cart.errors.full_messages
   end

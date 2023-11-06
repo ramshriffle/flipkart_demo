@@ -3,13 +3,12 @@
 # user class
 class User < ApplicationRecord
   validates :username, :email, presence: true, uniqueness: { case_sensitive: false }
-  validates :email, format: { with: /\A[^@\s]+@gmail\.com\z/i }, unless: lambda{ email.blank? }
   validates :name, :type, :mobile_no, presence: true
-  # validates :mobile_no, uniqueness: true
-  validates :mobile_no, format: { with: /\A^[6-9]\d{9}$\z/ }
-  # validates :password, format: { with:  /\A^[([a-z]|[A-Z])0-9_-]{6,10}$\z/, message: "must be at least 6 characters and include one number and one letter." } , if: :password_digest_changed? || :new_record?
   validates :password, confirmation: true
   validates :password_confirmation, presence: true, if: :password_digest_changed?
+
+  validates :email, format: { with: /\A[^@\s]+@gmail\.com\z/i }, unless: -> { email.blank? }
+  # validates :mobile_no, format: { with: /\A^[6-9]\d{9}$\z/ }
 
   has_secure_password
   has_one_attached :profile_picture

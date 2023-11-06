@@ -9,21 +9,24 @@ class CartItemsController < ApplicationController
   before_action :set_params, only: %i[show update destroy]
 
   def index
+    byebug
     cart_items = @current_user.cart_items.all
-    return render json: 'Cart is empty' if cart_items.empty?
+    return render json: { message: 'Cart is empty' }, status: :not_found if cart_items.empty?
 
-    render json: cart_items.page(params[:page]), status: :ok
+    render json: cart_items, status: :ok
   end
 
   def show
-    render json: @cart_item
+    byebug
+    render json: @cart_item, status: :ok
   end
 
   def create
+    byebug
     cart_item = @current_user.cart_items.find_by_product_id(params[:product_id])
     if cart_item
       update_quantity(cart_item)
-      return render json: cart_item, status: :ok
+      return render json: cart_item, status: :created
     end
 
     add_item = @current_user.cart.cart_items.new(cart_item_params)
@@ -35,28 +38,30 @@ class CartItemsController < ApplicationController
   end
 
   def update_quantity(cart_item)
+    byebug
     quantity = cart_item.quantity + params[:quantity]
     cart_item.update(quantity: quantity)
   end
 
   def update
+    byebug
     if @cart_item.update(cart_item_params)
-      render json: { message: 'Item update successfully', item: @cart_item }, status: 200
+      render json: { message: 'Item update successfully' }, status: 200
     else
       render json: @cart_item.errors.full_messages, status: :unprocessable_entity
     end
   end
 
   def destroy
-    render json: 'Cart item removed successfully', status: :ok if @cart_item.destroy
+    byebug
+    return render json: { message: 'Cart item removed successfully' }, status: :ok if @cart_item.destroy
 
     render json: @cart_item.errors.full_messages
   end
 
   def set_params
-    return render json: 'Cart is empty', status: :not_found unless @current_user.cart
-
-    @cart_item = @current_user.cart.cart_items.find_by_id(params[:id])
+    byebug
+    @cart_item = @current_user.cart_items.find_by_id(params[:id])
     render json: 'item not found', status: :not_found unless @cart_item
   end
 

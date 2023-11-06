@@ -3,7 +3,11 @@
 require 'sidekiq/web'
 Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
-  ActiveAdmin.routes(self)  rescue ActiveAdmin::DatabaseHitDuringLoad
+  begin
+    ActiveAdmin.routes(self)
+  rescue StandardError
+    ActiveAdmin::DatabaseHitDuringLoad
+  end
 
   mount Sidekiq::Web => '/sidekiq'
 
@@ -16,10 +20,11 @@ Rails.application.routes.draw do
   resources :products
   get 'search_products', to: 'products#search_products'
 
-  resources :orders
+  resources :orders do
+    resources :order_items, only: %i[index]
+  end
   post 'buy_now', to: 'orders#buy_now'
 
-  resources :order_items, only: %i[index]
   resource :carts, only: %i[show destroy]
   resources :cart_items
 end
