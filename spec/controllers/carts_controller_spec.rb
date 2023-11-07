@@ -36,13 +36,12 @@ RSpec.describe CartsController, type: :controller do
           end
         end
 
-        # context 'cart not found' do
-        #   let(:params) { { id: 0 } }
-        #   it 'cart not found' do
-        #     byebug
-        #     expect(subject).to have_http_status(404)
-        #   end
-        # end
+        context 'cart not found' do
+          let(:params) { { id: 0 } }
+          it 'cart not found' do
+            expect(subject).to have_http_status(404)
+          end
+        end
       end
 
       context 'with invalid token' do
@@ -74,7 +73,6 @@ RSpec.describe CartsController, type: :controller do
       context 'with valid token' do
         context 'cart found' do
           it 'delete product successfully' do
-            byebug
             expect(subject).to have_http_status(200)
             expect(JSON.parse(subject.body)).to eq('message' => 'Cart deleted successfully!!')
           end

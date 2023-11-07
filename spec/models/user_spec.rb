@@ -30,10 +30,23 @@ RSpec.describe User, type: :model do
   end
 
   describe 'methods' do
-    it 'generate otp' do
+    before do
       @user.generate_otp
+    end
+
+    it 'generate otp' do
       expect(@user.otp).not_to be_nil
       expect(@user.otp_sent_at).not_to be_nil
     end
+
+    it 'otp is valid' do
+      expect(@user.valid_otp).to be true
+    end
+
+    # it 'otp is invalid' do
+    #   byebug
+    #   @user.otp_sent_at = 3.hour.ago
+    #   expect(@user.valid_otp).to be false
+    # end
   end
 end

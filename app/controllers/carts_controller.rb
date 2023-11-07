@@ -3,17 +3,15 @@
 # carts controller
 class CartsController < ApplicationController
   before_action :authorize_request
-  load_and_authorize_resource
-
   before_action :set_params, only: %i[show destroy]
 
+  load_and_authorize_resource
+
   def show
-    byebug
     render json: @cart, status: :ok
   end
 
   def destroy
-    byebug
     return render json: { message: 'Cart deleted successfully!!' }, status: :ok if @cart.destroy
 
     render json: @cart.errors.full_messages

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# ability class
 class Ability
   include CanCan::Ability
 
@@ -13,7 +14,6 @@ class Ability
       can :manage, Order
       can :manage, CartItem
       can :manage, OrderItem
-      can :read, Product
       can :search_products, Product
     end
   end

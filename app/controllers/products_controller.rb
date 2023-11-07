@@ -3,12 +3,12 @@
 # product controller class
 class ProductsController < ApplicationController
   before_action :authorize_request
-  load_and_authorize_resource
-
   before_action :set_params, only: %i[show update destroy]
 
+  load_and_authorize_resource
+
   def index
-    products = Product.all # page(params[:page])
+    products = @current_user.products.all # page(params[:page])
     render json: products, status: :ok
   end
 
@@ -41,16 +41,15 @@ class ProductsController < ApplicationController
 
   def search_products
     products = if params[:category].present?
-                 Product.where('category LIKE ?', "%#{params[:category]}%").page(params[:page])
+                 Product.all.where('category LIKE ?', "%#{params[:category]}%")
                elsif params[:title].present?
-                 Product.where('title LIKE ?', "%#{params[:title]}%").page(params[:page])
+                 Product.all.where('title LIKE ?', "%#{params[:title]}%")
                else
-                 Product.page(params[:page]).per(2)
+                 Product.all
                end
-
     return render json: products, status: :ok if products.present?
 
-    render json: 'Product not found', status: :ok
+    render json: 'Product not found', status: :not_found
   end
 
   private
@@ -60,8 +59,7 @@ class ProductsController < ApplicationController
   end
 
   def set_params
-    byebug
-    @product = Product.find_by(id: params[:id])
-    render json: 'Product not found', status: :not_found unless @product
+    @product = @current_user.products.find_by_id(params[:id])
+    render json: { errors: 'Product not found' }, status: :not_found unless @product
   end
 end

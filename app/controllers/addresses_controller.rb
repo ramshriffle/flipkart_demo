@@ -6,13 +6,11 @@ class AddressesController < ApplicationController
   before_action :set_params, only: %i[show destroy]
 
   def index
-    byebug
     addresses = @current_user.addresses.all
     render json: addresses, status: :ok
   end
 
   def show
-    byebug
     render json: @address, status: :ok
   end
 
@@ -32,9 +30,8 @@ class AddressesController < ApplicationController
   end
 
   def set_params
-    byebug
     @address = @current_user.addresses.find_by_id(params[:id])
-    render json: 'Address not found' unless @address # .nil?
+    render json: { message: 'Address not found' }, status: :not_found unless @address # .nil?
   end
 
   def address_params

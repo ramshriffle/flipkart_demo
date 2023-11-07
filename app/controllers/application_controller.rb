@@ -30,4 +30,9 @@ class ApplicationController < ActionController::Base
       render json: { error: 'Invalid token' }, status: :unauthorized
     end
   end
+
+  # rescue_from ActiveRecord::RecordNotFound, with: :handle_exception
+  # def handle_exception
+  #   render json: { error: 'ID not found' }, status: :not_found
+  # end
 end

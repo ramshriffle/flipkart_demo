@@ -9,8 +9,5 @@ FactoryBot.define do
     password_confirmation { password }
     type { 'Customer' }
     mobile_no { Faker::PhoneNumber.cell_phone_with_country_code }
-    # otp { SecureRandom.hex(3) }
-    # otp_sent_at { Time.now.utc }
-    # verified { true }
   end
 end

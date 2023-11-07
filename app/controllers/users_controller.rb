@@ -19,11 +19,9 @@ class UsersController < ApplicationController
   end
 
   def update
-    if @current_user.update(user_params)
-      render json: @current_user, status: :ok
-    else
-      render json: { errors: @current_user.errors.full_messages }, status: :unprocessable_entity
-    end
+    return render json: @current_user, status: :ok if @current_user.update(user_params)
+
+    render json: { errors: @current_user.errors.full_messages }, status: :unprocessable_entity
   end
 
   def destroy
@@ -35,7 +33,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    # params.permit(:name, :username, :email, :password, :password_confirmation, :type, :mobile_no, :profile_picture)
     params.require(:user).permit(
       :name,
       :username,

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# api integration class
 class ApiIntegration
   include Sidekiq::Worker
 

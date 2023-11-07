@@ -63,4 +63,39 @@ RSpec.describe AuthenticationController, type: :controller do
       end
     end
   end
+
+  describe 'POST verify otp' do
+    let(:user) { FactoryBot.create(:user, otp: '123456', otp_sent_at: Time.now.utc) }
+    let(:params) { { otp: user.otp } }
+
+    subject do
+      post :verify_otp, params: params
+    end
+
+    context 'verify user by otp' do
+      context 'otp  is correct' do
+        it 'user verified' do
+          expect(subject).to have_http_status(200)
+          expect(subject.body).to eq('Authorize user, now you can login your account')
+        end
+      end
+
+      context 'otp  is wrong' do
+        let(:params) { { otp: '000000' } }
+        it 'otp is not valid' do
+          expect(subject).to have_http_status(404)
+          expect(JSON.parse(subject.body)).to eq({ 'error' => 'otp is not valid or expired. try again' })
+        end
+      end
+
+      context 'otp  is expired' do
+        let(:user) { FactoryBot.create(:user, otp: '123456', otp_sent_at: 2.hour.ago) }
+        let(:params) { { otp: user.otp } }
+        it 'otp is expired' do
+          expect(subject).to have_http_status(404)
+          expect(JSON.parse(subject.body)).to eq({ 'error' => 'otp is not valid or expired. try again' })
+        end
+      end
+    end
+  end
 end

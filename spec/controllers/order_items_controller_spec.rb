@@ -33,7 +33,6 @@ RSpec.describe OrderItemsController, type: :controller do
     context 'with token' do
       context 'with valid token' do
         it 'returns all order items' do
-          byebug
           expect(subject).to have_http_status(200)
         end
       end

@@ -124,4 +124,28 @@ RSpec.describe UsersController, type: :controller do
       end
     end
   end
+
+  describe 'POST create' do
+    let(:params) do
+      { user: { name: 'ram', username: 'ramkushwah', email: 'ram123@gmail.com', password: 'ram123',
+                password_confirmation: 'ram123', type: 'Customer', mobile_no: '9977882211' } }
+    end
+
+    subject do
+      post :create, params: params
+    end
+
+    context 'valid params' do
+      it 'retrurn created new user' do
+        expect(subject).to have_http_status(201)
+      end
+    end
+
+    context 'invalid params' do
+      let(:params) { { user: { name: '' } } }
+      it 'return unprocessable entity' do
+        expect(subject).to have_http_status(422)
+      end
+    end
+  end
 end

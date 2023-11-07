@@ -9,5 +9,6 @@ FactoryBot.define do
     quantity { 50 }
     rating { Faker::Number.between(from: 1, to: 5) }
     user_id { FactoryBot.create(:user, type: 'Vendor').id }
+    # image {Faker::File.dir}
   end
 end

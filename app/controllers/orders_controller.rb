@@ -3,9 +3,9 @@
 # orders controller
 class OrdersController < ApplicationController
   before_action :authorize_request
-  load_and_authorize_resource
-
   before_action :set_params, only: %i[show destroy]
+
+  load_and_authorize_resource
 
   def index
     orders = @current_user.orders
@@ -26,12 +26,12 @@ class OrdersController < ApplicationController
       if order.save
         # OrderMailer.with(user: @current_user, order: order).order_confirmed.deliver_now
         cart_items.destroy_all
-        render json: order.order_items
+        render json: order.order_items, status: :created
       else
-        render json: order.errors.full_messages
+        render json: { errors: order.errors.full_messages }, status: :unprocessable_entity
       end
     else
-      render json: 'Cart is empty'
+      render json: 'Cart is empty', status: :not_found
     end
   end
 
@@ -56,7 +56,7 @@ class OrdersController < ApplicationController
   def destroy
     return render json: { message: 'Order cancel succssefully' }, status: :ok if @order.destroy
 
-    render json: @order.errors.full_messages, status: :ok
+    render json: @order.errors.full_messages
   end
 
   private
@@ -66,7 +66,7 @@ class OrdersController < ApplicationController
   end
 
   def set_params
-    @order = Order.find_by_id(params[:id])
+    @order = @current_user.orders.find_by_id(params[:id])
     render json: 'order not found', status: :not_found unless @order
   end
 end
