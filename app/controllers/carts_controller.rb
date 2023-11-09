@@ -3,9 +3,8 @@
 # carts controller
 class CartsController < ApplicationController
   before_action :authorize_request
-  before_action :set_params, only: %i[show destroy]
-
   load_and_authorize_resource
+  before_action :set_params, only: %i[show destroy]
 
   def show
     render json: @cart, status: :ok
@@ -20,7 +19,7 @@ class CartsController < ApplicationController
   private
 
   def set_params
-    @cart = @current_user.cart
+    @cart = @current_user.cart  
     render json: 'Cart not found', status: :not_found unless @cart
   end
 end

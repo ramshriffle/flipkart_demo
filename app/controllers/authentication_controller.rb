@@ -16,13 +16,11 @@ class AuthenticationController < ApplicationController
 
   def sent_otp
     user = User.find_by_email(params[:email])
-    if user.present?
-      user.generate_otp
-      UserMailer.sent_otp_email(user).deliver_now
-      render json: 'otp successfully generated for login', status: :ok
-    else
-      render json: 'Email not found, check your email', status: :not_found
-    end
+    return render json: 'Email not found, check your email', status: :not_found unless user
+
+    user.generate_otp
+    UserMailer.sent_otp_email(user).deliver_now
+    render json: 'otp successfully generated for login', status: :ok
   end
 
   def verify_otp

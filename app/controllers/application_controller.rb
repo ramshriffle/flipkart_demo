@@ -13,14 +13,14 @@ class ApplicationController < ActionController::Base
   end
 
   before_action do
-    ActiveStorage::Current.host = request.base_url
+    ActiveStorage::Current.url_options = { protocol: request.protocol, host: request.host, port: request.port }
   end
 
   private
 
   def authorize_request
-    header = request.headers['Authorization']
-    token = header.split(' ').last if header
+    token = request.headers[:token] || params[:token]
+    token = token.split(' ').last if token
     begin
       decoded = jwt_decode(token)
       @current_user = User.find(decoded[:user_id])

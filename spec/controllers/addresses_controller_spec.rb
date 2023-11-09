@@ -13,7 +13,7 @@ RSpec.describe AddressesController, type: :controller do
 
   describe 'GET index' do
     subject do
-      request.headers['Authorization'] = bearer_token
+      request.headers[:token] = bearer_token
       get :index
     end
 
@@ -44,7 +44,7 @@ RSpec.describe AddressesController, type: :controller do
     let(:params) { { id: address.id } }
 
     subject do
-      request.headers['Authorization'] = bearer_token
+      request.headers[:token] = bearer_token
       get 'show', params: params
     end
 
@@ -86,7 +86,7 @@ RSpec.describe AddressesController, type: :controller do
     let(:params) { {} }
 
     subject do
-      request.headers['Authorization'] = bearer_token
+      request.headers[:token] = bearer_token
       post :create, params: params
     end
 
@@ -131,7 +131,7 @@ RSpec.describe AddressesController, type: :controller do
     let(:params) { { id: address.id } }
 
     subject do
-      request.headers['Authorization'] = bearer_token
+      request.headers[:token] = bearer_token
       delete :destroy, params: params
     end
 

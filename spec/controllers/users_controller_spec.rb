@@ -21,7 +21,7 @@ RSpec.describe UsersController, type: :controller do
     let(:params) { { id: user.id } }
 
     subject do
-      request.headers['Authorization'] = bearer_token
+      request.headers[:token] = bearer_token
       get :show
     end
 
@@ -53,7 +53,7 @@ RSpec.describe UsersController, type: :controller do
     let(:params) { {} }
 
     subject do
-      request.headers['Authorization'] = bearer_token
+      request.headers[:token] = bearer_token
       put :update, params: params
     end
 
@@ -96,7 +96,7 @@ RSpec.describe UsersController, type: :controller do
 
   describe 'DELETE destroy' do
     subject do
-      request.headers['Authorization'] = bearer_token
+      request.headers[:token] = bearer_token
       put :destroy
     end
 

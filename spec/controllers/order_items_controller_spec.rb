@@ -19,7 +19,7 @@ RSpec.describe OrderItemsController, type: :controller do
     let(:params) { { order_id: order_item.order_id } }
 
     subject do
-      request.headers['Authorization'] = bearer_token
+      request.headers[:token] = bearer_token
       get :index, params: params
     end
 

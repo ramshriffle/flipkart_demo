@@ -3,6 +3,9 @@
 # order class
 class Order < ApplicationRecord
   paginates_per 2
+
+  enum status: {confirm: "confirm", cancel: "cancel"}
+
   belongs_to :customer, foreign_key: 'user_id'
   belongs_to :address
   has_many :order_items, dependent: :destroy

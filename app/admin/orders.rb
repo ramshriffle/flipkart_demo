@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 ActiveAdmin.register Order do
-  permit_params :user_id, :address_id
+  permit_params :user_id, :address_id, :status
 
   index do
     selectable_column
     id_column
     column :customer
     column :address_id
+    column :status
     actions
   end
 

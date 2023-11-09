@@ -3,12 +3,11 @@
 # product controller class
 class ProductsController < ApplicationController
   before_action :authorize_request
+  load_and_authorize_resource
   before_action :set_params, only: %i[show update destroy]
 
-  load_and_authorize_resource
-
   def index
-    products = @current_user.products.all # page(params[:page])
+    products = @current_user.products.page(params[:page])
     render json: products, status: :ok
   end
 

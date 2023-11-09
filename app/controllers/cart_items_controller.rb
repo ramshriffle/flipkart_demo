@@ -3,10 +3,9 @@
 # cart item controller
 class CartItemsController < ApplicationController
   before_action :authorize_request
+  load_and_authorize_resource
   before_action :set_cart, only: %i[create]
   before_action :set_params, only: %i[show update destroy]
-
-  load_and_authorize_resource
 
   def index
     cart_items = @current_user.cart_items.all
@@ -27,11 +26,10 @@ class CartItemsController < ApplicationController
     end
 
     add_item = @current_user.cart.cart_items.new(cart_item_params)
-    if add_item.save
-      render json: { message: 'Item added successfully', item: add_item }, status: :created
-    else
-      render json: add_item.errors, status: :unprocessable_entity
-    end
+
+    return render json: { message: 'Item added successfully', item: add_item }, status: :created if add_item.save
+
+    render json: add_item.errors, status: :unprocessable_entity
   end
 
   def update_quantity(cart_item)

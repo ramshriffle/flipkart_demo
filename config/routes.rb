@@ -24,6 +24,8 @@ Rails.application.routes.draw do
     resources :order_items, only: %i[index]
   end
   post 'buy_now', to: 'orders#buy_now'
+  # put 'cancel_order/:id', to: 'orders#cancel_order'
+
 
   resource :carts, only: %i[show destroy]
   resources :cart_items

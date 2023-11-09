@@ -41,12 +41,7 @@ class UsersController < ApplicationController
       :password_confirmation,
       :type,
       :mobile_no,
-      addresses_attributes: %i[
-        id
-        street
-        city
-        pincode
-      ]
+      addresses_attributes: %i[id street city pincode]
     )
   end
 end

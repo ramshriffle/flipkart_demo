@@ -16,7 +16,7 @@ RSpec.describe CartsController, type: :controller do
     let(:params) { { id: cart.id } }
 
     subject do
-      request.headers['Authorization'] = bearer_token
+      request.headers[:token] = bearer_token
       get 'show', params: params
     end
 
@@ -58,7 +58,7 @@ RSpec.describe CartsController, type: :controller do
     let(:params) { { id: cart.id } }
 
     subject do
-      request.headers['Authorization'] = bearer_token
+      request.headers[:token] = bearer_token
       delete :destroy, params: params
     end
 

@@ -13,7 +13,7 @@ RSpec.describe ProductsController, type: :controller do
 
   describe 'Get index' do
     subject do
-      request.headers['Authorization'] = bearer_token
+      request.headers[:token] = bearer_token
       get :index
     end
 
@@ -86,7 +86,7 @@ RSpec.describe ProductsController, type: :controller do
     let(:params) { {} }
 
     subject do
-      request.headers['Authorization'] = bearer_token
+      request.headers[:token] = bearer_token
       post :create, params: params
     end
 
@@ -133,7 +133,7 @@ RSpec.describe ProductsController, type: :controller do
     let(:params) { { id: product.id } }
 
     subject do
-      request.headers['Authorization'] = bearer_token
+      request.headers[:token] = bearer_token
       put :update, params: params
     end
 
@@ -186,7 +186,7 @@ RSpec.describe ProductsController, type: :controller do
     let(:params) { { id: product.id } }
 
     subject do
-      request.headers['Authorization'] = bearer_token
+      request.headers[:token] = bearer_token
       delete :destroy, params: params
     end
 
@@ -203,6 +203,9 @@ RSpec.describe ProductsController, type: :controller do
           it 'delete product successfully' do
             expect(subject).to have_http_status(200)
             expect(JSON.parse(subject.body)).to eq('message' => 'Product delete successfully')
+            expect do
+              subject
+            end.to change(Product, :count).by(0)
           end
         end
 
@@ -228,7 +231,7 @@ RSpec.describe ProductsController, type: :controller do
     let(:params) { {} }
 
     subject do
-      request.headers['Authorization'] = bearer_token
+      request.headers[:token] = bearer_token
       get :search_products, params: params
     end
 
@@ -264,7 +267,7 @@ RSpec.describe ProductsController, type: :controller do
 
         context 'when category present' do
           let(:params) { { category: 'zzzz' } }
-          it 'returns product not found' do
+          it 'when category not found, returns product not found' do
             expect(subject).to have_http_status(404)
             expect(subject.body).to eq('Product not found')
           end

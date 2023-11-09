@@ -1,0 +1,1 @@
+      decoded = jwt_decode(token)

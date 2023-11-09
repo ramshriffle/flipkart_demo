@@ -1,0 +1,9 @@
+api_integration_worker:
+  cron: '* * * * *'
+  class: 'ApiIntegrationWorker'
+  queue: 'default'
+
+advance_order_worker:
+  cron: "*/5 * * * *"
+  class: 'AdvanceOrderWorker'
+  queue: 'default'

@@ -7,8 +7,8 @@ class User < ApplicationRecord
   validates :password, confirmation: true
   validates :password_confirmation, presence: true, if: :password_digest_changed?
 
-  validates :email, format: { with: /\A[^@\s]+@gmail\.com\z/i }, unless: -> { email.blank? }
-  # validates :mobile_no, format: { with: /\A^[6-9]\d{9}$\z/ }
+  # validates :email, format: { with: /\A[^@\s]+@gmail\.com\z/i }, unless: -> { email.blank? }
+  validates :mobile_no, format: { with: /\A^[6-9]\d{9}$\z/ }
 
   has_secure_password
   has_one_attached :profile_picture

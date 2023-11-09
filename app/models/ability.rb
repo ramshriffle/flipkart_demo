@@ -5,7 +5,7 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    user ||= User.new  # Guest user
+    # user ||= User.new  # Guest user
 
     if user.type == 'Vendor'
       can :manage, Product
@@ -16,5 +16,16 @@ class Ability
       can :manage, OrderItem
       can :search_products, Product
     end
+
+    # return if user.blank?
+
+    # can %i[update destroy], Order, { user: }
+    # can :read, Order, user_id: user.id
+    # can :manage, Product, user_id: user.id
+    # can :manage, Order, user_id: user.id
+    # can :manage, Cart, user_id: user.id
+    # can :manage, OrderItem, user_id: user.id
+    # can :manage, CartItem, user_id: user.id
+
   end
 end
