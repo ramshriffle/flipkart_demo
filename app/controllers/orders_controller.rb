@@ -20,13 +20,6 @@ class OrdersController < ApplicationController
     return render json: 'Cart is empty', status: :no_content if cart_items.empty?
 
     order_now(cart_items)
-    # if order.save
-    #   # OrderMailer.with(user: @current_user, order: order).order_confirmed.deliver_now
-    #   cart_items.destroy_all
-    #   render json: order, status: :created
-    # else
-    #   render json: { errors: order.errors.full_messages }, status: :unprocessable_entity
-    # end
   end
 
   def order_now(cart_items)
