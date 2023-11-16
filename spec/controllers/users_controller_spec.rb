@@ -71,7 +71,7 @@ RSpec.describe UsersController, type: :controller do
           it 'returns user' do
             expect(subject).to have_http_status(200)
             expect(JSON.parse(subject.body)).to eq('id' => user.id, 'name' => 'ram', 'username' => user.username,
-                                                   'email' => user.email, 'mobile_no' => user.mobile_no, 'type' => user.type, 'profile_picture' => nil)
+                                                   'email' => user.email, 'type' => user.type, 'profile_picture' => nil)
           end
         end
 
@@ -128,7 +128,7 @@ RSpec.describe UsersController, type: :controller do
   describe 'POST create' do
     let(:params) do
       { user: { name: 'ram', username: 'ramkushwah', email: 'ram123@gmail.com', password: 'ram123',
-                password_confirmation: 'ram123', type: 'Customer', mobile_no: '9977882211' } }
+                password_confirmation: 'ram123', type: 'Customer' } }
     end
 
     subject do

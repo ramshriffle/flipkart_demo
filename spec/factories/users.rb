@@ -8,6 +8,5 @@ FactoryBot.define do
     password { Faker::Internet.password(min_length: 6, mix_case: true, special_characters: true) }
     password_confirmation { password }
     type { 'Customer' }
-    mobile_no { Faker::PhoneNumber.cell_phone_with_country_code }
   end
 end

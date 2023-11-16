@@ -20,9 +20,7 @@ Rails.application.routes.draw do
   resources :products
   get 'search_products', to: 'products#search_products'
 
-  resources :orders do
-    resources :order_items, only: %i[index]
-  end
+  resources :orders
   post 'buy_now', to: 'orders#buy_now'
   # put 'cancel_order/:id', to: 'orders#cancel_order'
 

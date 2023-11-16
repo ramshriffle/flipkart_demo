@@ -13,19 +13,7 @@ class Ability
       can :manage, Cart
       can :manage, Order
       can :manage, CartItem
-      can :manage, OrderItem
       can :search_products, Product
     end
-
-    # return if user.blank?
-
-    # can %i[update destroy], Order, { user: }
-    # can :read, Order, user_id: user.id
-    # can :manage, Product, user_id: user.id
-    # can :manage, Order, user_id: user.id
-    # can :manage, Cart, user_id: user.id
-    # can :manage, OrderItem, user_id: user.id
-    # can :manage, CartItem, user_id: user.id
-
   end
 end

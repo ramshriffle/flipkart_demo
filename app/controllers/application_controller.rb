@@ -3,9 +3,6 @@
 # application controller
 class ApplicationController < ActionController::Base
   include JsonWebToken
-
-  attr_accessor :current_user
-
   skip_before_action :verify_authenticity_token
 
   rescue_from CanCan::AccessDenied do |_exception|
@@ -30,9 +27,10 @@ class ApplicationController < ActionController::Base
       render json: { error: 'Invalid token' }, status: :unauthorized
     end
   end
+  attr_accessor :current_user
 
-  # rescue_from ActiveRecord::RecordNotFound, with: :handle_exception
-  # def handle_exception
-  #   render json: { error: 'ID not found' }, status: :not_found
-  # end
+  rescue_from ActiveRecord::RecordNotFound, with: :handle_exception
+  def handle_exception
+    render json: { message: 'Record not found' }, status: :not_found
+  end
 end

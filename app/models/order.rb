@@ -4,18 +4,30 @@
 class Order < ApplicationRecord
   paginates_per 2
 
-  enum status: {confirm: "confirm", cancel: "cancel"}
+  enum status: { confirm: 'confirm', cancel: 'cancel' }
+  validates :quantity, presence: true, numericality: { greater_than_or_equal_to: 1, only_integer: true }
 
   belongs_to :customer, foreign_key: 'user_id'
+  belongs_to :product
   belongs_to :address
-  has_many :order_items, dependent: :destroy
-  accepts_nested_attributes_for :order_items
 
-  def self.ransackable_attributes(_auth_object = nil)
-    %w[created_at id updated_at user_id]
+  before_save :total_price
+
+  validate :quantity_is_available
+
+  def quantity_is_available
+    available_quantity = product.quantity - sum_product_orders
+    return unless quantity > available_quantity
+
+    errors.add(:base, 'Product is not available in more quantity')
   end
 
-  def self.ransackable_associations(_auth_object = nil)
-    %w[address customer order_items]
+  def sum_product_orders
+    Order.where(product: product).sum(:quantity)
+  end
+
+  def total_price
+    item_price = product.price * quantity
+    self.price = item_price
   end
 end

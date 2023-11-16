@@ -3,12 +3,12 @@
 # user class
 class User < ApplicationRecord
   validates :username, :email, presence: true, uniqueness: { case_sensitive: false }
-  validates :name, :type, :mobile_no, presence: true
+  validates :name, :type, presence: true
   validates :password, confirmation: true
   validates :password_confirmation, presence: true, if: :password_digest_changed?
 
   # validates :email, format: { with: /\A[^@\s]+@gmail\.com\z/i }, unless: -> { email.blank? }
-  validates :mobile_no, format: { with: /\A^[6-9]\d{9}$\z/ }
+  # validates :mobile_no, format: { with: /\A^[6-9]\d{9}$\z/ }
 
   has_secure_password
   has_one_attached :profile_picture

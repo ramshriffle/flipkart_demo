@@ -3,7 +3,7 @@ api_integration_worker:
   class: 'ApiIntegrationWorker'
   queue: 'default'
 
-advance_order_worker:
-  cron: "*/5 * * * *"
-  class: 'AdvanceOrderWorker'
-  queue: 'default'
+# advance_order_worker:
+#   cron: "*/5 * * * *"
+#   class: 'AdvanceOrderWorker'
+#   queue: 'default'  

@@ -10,14 +10,12 @@
     <p>Your product details is :</p>  
 
     <div class="container">
-      <% @order.order_items.each do |order| %>
         <div class="order">
-          <div> Product Category : <%= order.product.category %></div>
-          <div> Product Price : <%= order.product.price %></div>
-          <div> Quantity : <%= order.quantity %></div>
-          <div> Total price : <%= order.price %></div><br>
+          <div> Product Category : <%= @order.product.category %></div>
+          <div> Product Price : <%= @order.product.price %></div>
+          <div> Quantity : <%= @order.quantity %></div>
+          <div> Total price : <%= @order.price %></div><br>
         </div>
-      <% end %>  
     </div>
 
     <p>If you did not make this order then please ignore this email</p>

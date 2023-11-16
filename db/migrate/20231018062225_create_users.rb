@@ -9,7 +9,6 @@ class CreateUsers < ActiveRecord::Migration[7.0]
       t.string :email
       t.string :password_digest
       t.string :type
-      t.string :mobile_no
       t.string :otp
       t.datetime :otp_sent_at
       t.boolean :verified, default: false

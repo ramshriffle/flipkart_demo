@@ -19,7 +19,7 @@ class CartsController < ApplicationController
   private
 
   def set_params
-    @cart = @current_user.cart  
+    @cart = @current_user.cart
     render json: 'Cart not found', status: :not_found unless @cart
   end
 end

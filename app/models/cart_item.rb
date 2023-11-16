@@ -15,11 +15,11 @@ class CartItem < ApplicationRecord
     available_quantity = product.quantity - sum_product_orders
     return unless quantity > available_quantity
 
-    errors.add(:base, "Product is not available in more quantity")
+    errors.add(:base, 'Product is not available in more quantity')
   end
 
   def sum_product_orders
-    OrderItem.where(product: product).sum(:quantity)
+    Order.where(product: product).sum(:quantity)
   end
 
   def total_price

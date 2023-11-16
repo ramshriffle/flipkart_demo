@@ -93,24 +93,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_09_052252) do
     t.index ["user_id"], name: "index_carts_on_user_id"
   end
 
-  create_table "order_items", force: :cascade do |t|
+  create_table "orders", force: :cascade do |t|
     t.integer "quantity"
     t.decimal "price"
-    t.integer "order_id", null: false
+    t.integer "user_id", null: false
+    t.integer "address_id", null: false
     t.integer "product_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["order_id"], name: "index_order_items_on_order_id"
-    t.index ["product_id"], name: "index_order_items_on_product_id"
-  end
-
-  create_table "orders", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "address_id", default: 0, null: false
     t.string "status", default: "confirm"
     t.index ["address_id"], name: "index_orders_on_address_id"
+    t.index ["product_id"], name: "index_orders_on_product_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
@@ -133,7 +126,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_09_052252) do
     t.string "email"
     t.string "password_digest"
     t.string "type"
-    t.string "mobile_no"
     t.string "otp"
     t.datetime "otp_sent_at"
     t.boolean "verified", default: false
@@ -147,9 +139,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_09_052252) do
   add_foreign_key "cart_items", "carts"
   add_foreign_key "cart_items", "products"
   add_foreign_key "carts", "users"
-  add_foreign_key "order_items", "orders"
-  add_foreign_key "order_items", "products"
   add_foreign_key "orders", "addresses"
+  add_foreign_key "orders", "products"
   add_foreign_key "orders", "users"
   add_foreign_key "products", "users"
 end
