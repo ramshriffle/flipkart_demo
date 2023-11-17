@@ -7,9 +7,8 @@ RSpec.describe OrdersController, type: :controller do
   let(:user_v) { FactoryBot.create(:user, type: 'Vendor') }
   let(:product) { FactoryBot.create(:product, user_id: user_v.id) }
   let(:user_c) { FactoryBot.create(:user, type: 'Customer') }
-  let!(:order) { FactoryBot.create(:order, user_id: user_c.id) }
+  let!(:order) { FactoryBot.create(:order, user_id: user_c.id, product_id: product.id) }
   let(:cart) { FactoryBot.create(:cart, user_id: user_c.id) }
-  let(:order_item) { FactoryBot.create(:order_item, order_id: order.id, product_id: product.id) }
   let(:cart_item) { FactoryBot.create(:cart_item, cart_id: cart.id, product_id: product.id) }
 
   let(:token) do
@@ -64,7 +63,7 @@ RSpec.describe OrdersController, type: :controller do
     context 'with token' do
       context 'with valid token' do
         context 'order found' do
-          it 'returns order' do
+          it 'return  s order' do
             expect(subject).to have_http_status(200)
           end
         end
@@ -106,8 +105,7 @@ RSpec.describe OrdersController, type: :controller do
       context 'with valid token' do
         context 'valid params' do
           let(:params) do
-            { order: { user_id: order.user_id, address_id: order.address_id,
-                       order_items_attributes: [quantity: 1, product_id: order_item.product_id] } }
+            { user_id: order.user_id, address_id: order.address_id, quantity: 1, product_id: order.product_id }
           end
           it 'retrurn created new order' do
             expect(subject).to have_http_status(201)
@@ -116,7 +114,7 @@ RSpec.describe OrdersController, type: :controller do
         end
 
         context 'invalid params' do
-          let(:params) { { order: { user_is: order.user_id, address_id: nil } } }
+          let(:params) { { user_is: order.user_id, product_id: order.product_id, quantity: 1, address_id: nil } }
           it 'return unprocessable entity' do
             expect(subject).to have_http_status(422)
             expect(JSON.parse(subject.body)).to eq('errors' => ['Address must exist'])
@@ -195,8 +193,7 @@ RSpec.describe OrdersController, type: :controller do
       context 'with valid token' do
         context 'valid params' do
           let(:params) do
-            { order: { user_id: order.user_id, address_id: order.address_id,
-                       order_items_attributes: [quantity: cart_item.quantity, product_id: cart_item.product_id] } }
+            { user_id: order.user_id, address_id: order.address_id, quantity: cart_item.quantity, product_id: cart_item.product_id }
           end
           it 'retrurn created new order' do
             expect(subject).to have_http_status(201)

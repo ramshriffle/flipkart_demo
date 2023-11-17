@@ -7,3 +7,8 @@ api_integration_worker:
 #   cron: "*/5 * * * *"
 #   class: 'AdvanceOrderWorker'
 #   queue: 'default' 
+
+generate_csv_worker:
+  cron: '*/2 * * * *' 
+  class: 'GenerateCsvWorker'
+  queue: 'default'

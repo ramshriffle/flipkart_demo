@@ -45,7 +45,7 @@ RSpec.describe ProductsController, type: :controller do
     let(:params) { { id: product.id } }
 
     subject do
-      request.headers['Authorization'] = bearer_token
+      request.headers[:token] = bearer_token
       get 'show', params: params
     end
 
@@ -165,9 +165,9 @@ RSpec.describe ProductsController, type: :controller do
 
         context 'product not found' do
           let(:params) { { id: 0 } }
-          it 'return product not found' do
+          it 'return product  not found' do
             expect(subject).to have_http_status(404)
-            expect(JSON.parse(subject.body)).to eq({ 'errors' => 'Product not found' })
+            expect(JSON.parse(subject.body)).to eq({ 'message' => 'Record not found' })
           end
         end
       end
