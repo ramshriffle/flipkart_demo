@@ -2,7 +2,7 @@
 
 # product controller class
 class ProductsController < ApplicationController
-  before_action :authorize_request
+  before_action :authorize_request#, execpt: %i[test_api]
   load_and_authorize_resource
   before_action :set_params, only: %i[show update destroy]
 
@@ -50,6 +50,12 @@ class ProductsController < ApplicationController
 
     render json: 'Product not found', status: :not_found
   end
+
+  # def test_api
+  #   Product.reindex
+  #   products = Product.search(params[:query])
+  #   render json: products, status: :ok
+  # end
 
   private
 

@@ -2,6 +2,9 @@
 
 # product class
 class Product < ApplicationRecord
+  # include Searchable
+  # searchkick
+
   paginates_per 2
   validates :title, :description, :category, :quantity, :price, :rating, presence: true
   validates :quantity, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
@@ -13,6 +16,15 @@ class Product < ApplicationRecord
   belongs_to :vendor, foreign_key: 'user_id'
   has_many :orders, dependent: :destroy
   has_many :cart_items, dependent: :destroy
+
+  # def search_data
+  #   {
+  #     title: title,
+  #     description: description,
+  #     category: category
+  #   }
+  # end
+
 
   def self.ransackable_attributes(_auth_object = nil)
     %w[category created_at description id price quantity rating title updated_at user_id]

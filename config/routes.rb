@@ -19,9 +19,11 @@ Rails.application.routes.draw do
 
   resources :products
   get 'search_products', to: 'products#search_products'
+  # get 'test_api', to: 'products#test_api'
 
   resources :orders
   post 'buy_now', to: 'orders#buy_now'
+  get 'test_api', to: 'orders#test_api'
   # put 'cancel_order/:id', to: 'orders#cancel_order'
 
 

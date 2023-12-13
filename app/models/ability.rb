@@ -14,6 +14,7 @@ class Ability
       can :manage, Order
       can :manage, CartItem
       can :search_products, Product
+      can :test_api, Product
     end
   end
 end

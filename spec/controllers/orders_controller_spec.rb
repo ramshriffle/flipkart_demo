@@ -45,6 +45,44 @@ RSpec.describe OrdersController, type: :controller do
     end
   end
 
+  describe 'Get test_api' do
+    subject do
+      request.headers[:token] = bearer_token
+      get :test_api, params: params
+    end
+
+    context 'with params' do
+      context 'when params is correct' do
+        let!(:product1) { FactoryBot.create(:product, title: 'watch') }
+        let!(:orders) { FactoryBot.create(:order, product: product1) }
+        let(:params) { {query: 'watch'} }
+        it 'returns product' do
+          expect(subject).to have_http_status(200)
+        end
+      end
+
+      context 'when params is incorrect' do
+        let(:params) { {query: 'abc'} }
+        it 'returns empty array' do
+            expect(JSON.parse(subject.body)).to eq([])
+        end
+      end
+
+      context 'when params is empty' do
+        let(:params) { {query: ''} }
+        it 'returns empty array' do
+          expect(JSON.parse(subject.body)).to eq([])
+        end
+      end
+    end
+
+    # context 'without params' do
+    #   it 'returns empty array' do        
+    #     expect(JSON.parse(subject.body)).to eq([])
+    #   end
+    # end
+  end
+
   describe 'GET show' do
     let(:params) { { id: order.id } }
 

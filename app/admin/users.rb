@@ -16,7 +16,7 @@ ActiveAdmin.register User do
   #   permitted
   # end
 
-  permit_params :name, :username, :password, :password_confirmation, :email, :type, :mobile_no, :profile_picture
+  permit_params :name, :username, :password, :password_confirmation, :email, :type, :profile_picture
 
   index do
     selectable_column
@@ -26,7 +26,6 @@ ActiveAdmin.register User do
     column :email
     column :password_digest
     column :type
-    column :mobile_no
     actions
   end
 
@@ -41,7 +40,6 @@ ActiveAdmin.register User do
       f.input :username
       f.input :email
       f.input :type
-      f.input :mobile_no
       f.input :password
       f.input :password_confirmation
       f.input :profile_picture, as: :file
@@ -55,7 +53,6 @@ ActiveAdmin.register User do
       row :username
       row :email
       row :type
-      row :mobile_no
 
       if resource.profile_picture.attached?
         row :profile_picture do |img|

@@ -58,6 +58,12 @@ class OrdersController < ApplicationController
     end
   end
 
+  def test_api
+    Order.reindex
+    orders = Order.search(params[:query])
+    render json: orders,  status: :ok
+  end
+
   private
 
   def order_params
