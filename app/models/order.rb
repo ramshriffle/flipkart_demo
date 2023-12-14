@@ -18,8 +18,8 @@ class Order < ApplicationRecord
 
   def search_data
     self.attributes.merge(
-    {
-      product_name: product.title
+    { product_title: product.title, 
+      product_category: product.category 
     })
   end
 
