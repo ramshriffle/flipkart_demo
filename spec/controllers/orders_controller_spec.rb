@@ -64,7 +64,7 @@ RSpec.describe OrdersController, type: :controller do
       context 'when params is incorrect' do
         let(:params) { {query: 'abc'} }
         it 'returns empty array' do
-            expect(JSON.parse(subject.body)).to eq([])
+          expect(JSON.parse(subject.body)).to eq([])
         end
       end
 
