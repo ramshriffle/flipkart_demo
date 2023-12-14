@@ -29,7 +29,7 @@ class Product < ApplicationRecord
   def self.ransackable_attributes(_auth_object = nil)
     %w[category created_at description id price quantity rating title updated_at user_id]
   end
-
+#change
   def self.ransackable_associations(_auth_object = nil)
     %w[cart_items image_attachment image_blob order_items vendor]
   end

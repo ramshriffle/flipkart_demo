@@ -16,6 +16,7 @@ class Order < ApplicationRecord
 
   validate :quantity_is_available
 
+  #hyy
   def search_data
     self.attributes.merge(
     {
